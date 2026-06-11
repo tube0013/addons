@@ -1,0 +1,12 @@
+---
+configuration:
+  device:
+    name: Device
+    description: The serial port where the OpenThread RCP radio is attached.
+  log_level:
+    name: Log level
+    description: >-
+      The stack's logging verbosity. Debug logs every frame on the network and
+      is very chatty; info is appropriate for normal operation.
+network:
+  9999/tcp: WebSocket API

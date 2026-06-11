@@ -1,0 +1,7 @@
+---
+build_from:
+  aarch64: ghcr.io/home-assistant/aarch64-base:3.23
+  amd64: ghcr.io/home-assistant/amd64-base:3.23
+args:
+  # The zigpy/ziggurat commit the add-on is built from
+  ZIGGURAT_REF: 16808ee52d075d8de3382edebc3fed5a66707b5c

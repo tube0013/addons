@@ -1,0 +1,17 @@
+#!/usr/bin/with-contenv bashio
+# vim: ft=bash
+# shellcheck shell=bash
+# ==============================================================================
+# Start the ziggurat Zigbee stack
+# ==============================================================================
+declare device
+declare log_level
+
+device=$(bashio::config 'device')
+log_level=$(bashio::config 'log_level' 'info')
+
+export RUST_LOG="${log_level}"
+
+bashio::log.info "Starting ziggurat on ${device}..."
+
+exec /usr/bin/ziggurat "${device}" "0.0.0.0:9999"
