@@ -1,13 +1,13 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/home-assistant/base:3.23
 
 FROM rust:1-alpine AS builder
 
 RUN apk add --no-cache git musl-dev
 
-# The Supervisor's build context is the add-on directory, so the stack is built
-# from a fresh fetch of the commit pinned in build.yaml: bumping the pin is what
-# invalidates this layer and rebuilds.
-ARG ZIGGURAT_REF
+# The build context is the add-on directory, so the stack is built from a
+# fresh fetch of the commit pinned below: bumping the pin is what invalidates
+# this layer and rebuilds.
+ARG ZIGGURAT_REF=16808ee52d075d8de3382edebc3fed5a66707b5c
 WORKDIR /usr/src/ziggurat
 RUN git init . \
     && git fetch --depth 1 https://github.com/zigpy/ziggurat "${ZIGGURAT_REF}" \

@@ -23,3 +23,4 @@ ports:
 ports_description:
   9999/tcp: WebSocket API
 watchdog: tcp://[HOST]:9999
+image: ghcr.io/zigpy/ziggurat
