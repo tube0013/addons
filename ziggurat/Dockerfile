@@ -23,5 +23,8 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 
 FROM ${BUILD_FROM}
 
-COPY --from=builder /usr/bin/ziggurat /usr/bin/ziggurat
 COPY rootfs /
+COPY --from=builder /usr/bin/ziggurat /usr/bin/ziggurat
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s \
+    CMD nc -z 127.0.0.1 9999 || exit 1

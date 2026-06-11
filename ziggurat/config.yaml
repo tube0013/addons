@@ -10,7 +10,6 @@ arch:
 stage: experimental
 init: false
 startup: services
-boot: auto
 uart: true
 options:
   device: null
@@ -22,5 +21,4 @@ ports:
   9999/tcp: 9999
 ports_description:
   9999/tcp: WebSocket API
-watchdog: tcp://[HOST]:9999
 image: ghcr.io/zigpy/ziggurat-addon
