@@ -16,7 +16,9 @@ log_level=$(bashio::config 'log_level' 'info')
 
 bashio::log.info "Starting ziggurat on ${device}..."
 
-exec /usr/bin/ziggurat \
+# Win scheduling contests against batch workloads (database, transcoding) on a
+# loaded hub: frame turnaround latency feeds directly into perceived response
+exec nice -n -10 /usr/bin/ziggurat \
     --device "${device}" \
     --baudrate "${baudrate}" \
     --flow-control "${flow_control}" \

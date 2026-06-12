@@ -11,6 +11,9 @@ stage: experimental
 init: false
 startup: services
 uart: true
+# Boosting priority (negative nice) inside a container requires CAP_SYS_NICE
+privileged:
+  - SYS_NICE
 options:
   device: null
   baudrate: 460800
