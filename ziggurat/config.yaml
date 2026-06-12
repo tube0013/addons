@@ -13,9 +13,13 @@ startup: services
 uart: true
 options:
   device: null
+  baudrate: 460800
+  flow_control: hardware
   log_level: info
 schema:
   device: device(subsystem=tty)
+  baudrate: int
+  flow_control: list(hardware|software|none)
   log_level: list(error|warn|info|debug|trace)
 ports:
   9999/tcp: 9999

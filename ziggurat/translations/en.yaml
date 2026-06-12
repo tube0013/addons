@@ -3,6 +3,15 @@ configuration:
   device:
     name: Device
     description: The serial port where the OpenThread RCP radio is attached.
+  baudrate:
+    name: Baudrate
+    description: The serial baudrate of the RCP firmware.
+  flow_control:
+    name: Flow control
+    description: >-
+      The serial flow control mode. The RCP UART drops bytes under load without
+      hardware flow control; only change this if the radio's firmware was built
+      without it.
   log_level:
     name: Log level
     description: >-

@@ -30,6 +30,17 @@ losing the network.
 
 The serial port the 802.15.4 RCP radio is attached to.
 
+### Option: `baudrate`
+
+The serial baudrate of the RCP firmware. The default (460800) matches the
+firmware shipped for the ZBT-1/ZBT-2.
+
+### Option: `flow_control`
+
+The serial flow control mode (`hardware`, `software`, `none`). The RCP UART
+drops bytes under load without hardware flow control, corrupting frames; only
+change this if the radio's firmware was built without it.
+
 ### Option: `log_level`
 
 The stack's logging verbosity (`error`, `warn`, `info`, `debug`, `trace`).

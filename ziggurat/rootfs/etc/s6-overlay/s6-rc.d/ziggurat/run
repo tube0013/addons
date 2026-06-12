@@ -5,13 +5,20 @@
 # Start the ziggurat Zigbee stack
 # ==============================================================================
 declare device
+declare baudrate
+declare flow_control
 declare log_level
 
 device=$(bashio::config 'device')
+baudrate=$(bashio::config 'baudrate' '460800')
+flow_control=$(bashio::config 'flow_control' 'hardware')
 log_level=$(bashio::config 'log_level' 'info')
-
-export RUST_LOG="${log_level}"
 
 bashio::log.info "Starting ziggurat on ${device}..."
 
-exec /usr/bin/ziggurat "${device}" "0.0.0.0:9999"
+exec /usr/bin/ziggurat \
+    --device "${device}" \
+    --baudrate "${baudrate}" \
+    --flow-control "${flow_control}" \
+    --listen "0.0.0.0:9999" \
+    --log-level "${log_level}"
