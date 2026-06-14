@@ -7,7 +7,7 @@ RUN apk add --no-cache git musl-dev
 # The build context is the add-on directory, so the stack is built from a
 # fresh fetch of the commit pinned below: bumping the pin is what invalidates
 # this layer and rebuilds.
-ARG ZIGGURAT_REF=ff5a8344731d62a8ebdc86b0c12b1ce67cf012d5
+ARG ZIGGURAT_REF=f195ef09bceb9fffe480e5dfc5ad5a5ee85379c1
 WORKDIR /usr/src/ziggurat
 RUN git init . \
     && git fetch --depth 1 https://github.com/zigpy/ziggurat "${ZIGGURAT_REF}" \
