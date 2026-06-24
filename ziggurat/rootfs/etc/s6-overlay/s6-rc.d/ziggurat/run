@@ -8,19 +8,42 @@ declare device
 declare baudrate
 declare flow_control
 declare log_level
+declare listen
 
-device=$(bashio::config 'device')
-baudrate=$(bashio::config 'baudrate' '460800')
-flow_control=$(bashio::config 'flow_control' 'hardware')
-log_level=$(bashio::config 'log_level' 'info')
+if bashio::fs.file_exists '/data/options.json'; then
+    # Addon mode: Supervisor provides /data/options.json
+    device=$(bashio::config 'device')
+    baudrate=$(bashio::config 'baudrate' '460800')
+    flow_control=$(bashio::config 'flow_control' 'hardware')
+    log_level=$(bashio::config 'log_level' 'info')
+else
+    # Plain Docker mode: configuration comes from the environment variables
+    device="${ZIGGURAT_DEVICE}"
+    baudrate="${ZIGGURAT_BAUDRATE:-460800}"
+    flow_control="${ZIGGURAT_FLOW_CONTROL:-hardware}"
+    log_level="${ZIGGURAT_LOG_LEVEL:-info}"
+fi
+
+listen="${ZIGGURAT_LISTEN:-0.0.0.0:9999}"
 
 bashio::log.info "Starting ziggurat on ${device}..."
 
-# Win scheduling contests against batch workloads (database, transcoding) on a
-# loaded hub: frame turnaround latency feeds directly into perceived response
-exec nice -n -10 /usr/bin/ziggurat \
-    --device "${device}" \
-    --baudrate "${baudrate}" \
-    --flow-control "${flow_control}" \
-    --listen "0.0.0.0:9999" \
+declare -a args=(
+    --device "${device}"
+    --baudrate "${baudrate}"
+    --flow-control "${flow_control}"
+    --listen "${listen}"
     --log-level "${log_level}"
+)
+
+export RUST_BACKTRACE=full
+
+# Negative nice needs CAP_SYS_NICE, granted by the addon via `privileged: SYS_NICE`.
+# A bare `docker run` might not have it, so fall back to normal priority instead of
+# refusing to start.
+if nice -n -10 true 2>/dev/null; then
+    exec nice -n -10 /usr/bin/ziggurat "${args[@]}"
+else
+    bashio::log.warning "CAP_SYS_NICE not available; running at normal priority."
+    exec /usr/bin/ziggurat "${args[@]}"
+fi
