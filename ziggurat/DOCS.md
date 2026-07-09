@@ -26,9 +26,16 @@ losing the network.
 
 ## Configuration
 
-### Option: `device` (required)
+### Option: `device`
 
-The serial port the 802.15.4 RCP radio is attached to.
+The serial port the 802.15.4 RCP radio is attached to. Ignored if
+`network_address` is set. Required if `network_address` is not set.
+
+### Option: `network_address`
+
+Connect to the RCP over a raw TCP socket instead of a local serial port, e.g.
+`tcp://192.168.1.50:6638` — for a network-attached RCP or a `ser2net`-style
+serial-to-TCP bridge. Takes priority over `device` when set.
 
 ### Option: `baudrate`
 
@@ -94,3 +101,8 @@ services:
 
 `--cap-add SYS_NICE` lets the stack raise its scheduling priority. It is optional but
 recommended.
+
+To connect to the RCP over TCP instead of a serial device, set
+`ZIGGURAT_NETWORK_ADDRESS` (e.g. `tcp://192.168.1.50:6638`) instead of
+`ZIGGURAT_DEVICE`; `--device` and the `devices:`/`--cap-add SYS_NICE` serial-port
+plumbing are then unnecessary.

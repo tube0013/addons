@@ -2,7 +2,14 @@
 configuration:
   device:
     name: Device
-    description: The serial port where the OpenThread RCP radio is attached.
+    description: >-
+      The serial port where the OpenThread RCP radio is attached. Ignored if
+      Network Address is set.
+  network_address:
+    name: Network Address
+    description: >-
+      Connect to the RCP over TCP instead of a local serial port, e.g.
+      tcp://192.168.1.50:6638. Takes priority over Device when set.
   baudrate:
     name: Baudrate
     description: The serial baudrate of the RCP firmware.

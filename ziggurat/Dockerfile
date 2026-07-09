@@ -4,7 +4,11 @@ FROM rust:1-alpine AS builder
 
 RUN apk add --no-cache musl-dev
 
-ARG ZIGGURAT_VERSION=0.1.0
+# Testing build: pulls ziggurat-server from a fork/branch (PR #39) instead of the
+# published crates.io release. Revert to the `cargo install ziggurat-server --version`
+# form before this add-on is used for anything other than testing that PR.
+ARG ZIGGURAT_GIT=https://github.com/tube0013/ziggurat.git
+ARG ZIGGURAT_BRANCH=tcp-adaptor-support
 
 ENV CARGO_PROFILE_RELEASE_LTO=true \
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1 \
@@ -15,7 +19,8 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/tmp/cargo-target \
     CARGO_TARGET_DIR=/tmp/cargo-target \
     cargo install ziggurat-server \
-        --version "${ZIGGURAT_VERSION}" \
+        --git "${ZIGGURAT_GIT}" \
+        --branch "${ZIGGURAT_BRANCH}" \
         --bin ziggurat \
         --locked \
         --root /usr/local
