@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2-tcp-test
+
+ - Switches the testing build to `tcp-adaptor-support-legacy-protocol` instead of
+   `tcp-adaptor-support`: dev's tip (the ESP32 support merge, #29) changed the
+   send_aps wire protocol to fire-and-forget + async notifications, which the
+   currently-released zigpy-ziggurat doesn't understand yet and causes ZHA's startup
+   permit(0) broadcast to hang. This branch has the same TCP-transport patch rebuilt
+   on the pre-merge base instead, so it stays compatible with zigpy-ziggurat.
+
 ## 0.2.1-tcp-test
 
  - Testing build for [zigpy/ziggurat#39](https://github.com/zigpy/ziggurat/pull/39):
