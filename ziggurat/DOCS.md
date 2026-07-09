@@ -21,7 +21,7 @@ losing the network.
 2. Install the app and select the radio under **Device**.
 3. Start the app.
 4. Configure ZHA with radio type `ziggurat` and device path
-   `socket://local_ziggurat:9999`. An existing EmberZNet or Z-Stack network can be
+   `ws://local-ziggurat:9999`. An existing EmberZNet or Z-Stack network can be
    migrated by restoring its network backup.
 
 ## Configuration
