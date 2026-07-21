@@ -4,18 +4,15 @@ FROM rust:1-alpine AS builder
 
 RUN apk add --no-cache musl-dev
 
-# Testing build: pulls ziggurat-server from a fork/branch (PR #39) instead of the
-# published crates.io release. Uses tcp-adaptor-support-legacy-protocol, not
-# tcp-adaptor-support directly: dev's tip (the ESP32 support merge, #29) changed
-# handle_send_aps's wire protocol to fire-and-forget + async send_confirm/
-# aps_ack_confirm notifications, which the currently-released zigpy-ziggurat doesn't
-# understand yet (ZHA hangs on its startup permit(0) broadcast waiting on the old
-# "transmitted" signal that no longer arrives). This branch has the same TCP-transport
-# patch rebuilt on the pre-merge base so it stays compatible with zigpy-ziggurat until
-# that's sorted out upstream. Revert to the `cargo install ziggurat-server --version`
+# Testing build: pulls ziggurat-server from zigpy/ziggurat#39 (tube0013's
+# tcp-adaptor-support branch) instead of the published crates.io release. Pinned to a
+# commit rather than --branch: Docker only re-runs this layer when an ARG it depends on
+# actually changes, so pointing at a moving branch name would keep reusing a stale
+# cached build even after new commits land. Bump ZIGGURAT_REV to the branch's latest
+# commit to pick up updates. Revert to the `cargo install ziggurat-server --version`
 # form before this add-on is used for anything other than testing that PR.
 ARG ZIGGURAT_GIT=https://github.com/tube0013/ziggurat.git
-ARG ZIGGURAT_BRANCH=tcp-adaptor-support-legacy-protocol
+ARG ZIGGURAT_REV=a73c330d6fd54afb276b66468973afb25d49e8e2
 
 ENV CARGO_PROFILE_RELEASE_LTO=true \
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1 \
@@ -27,7 +24,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     CARGO_TARGET_DIR=/tmp/cargo-target \
     cargo install ziggurat-server \
         --git "${ZIGGURAT_GIT}" \
-        --branch "${ZIGGURAT_BRANCH}" \
+        --rev "${ZIGGURAT_REV}" \
         --bin ziggurat \
         --locked \
         --root /usr/local

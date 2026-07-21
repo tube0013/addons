@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.3-tcp-test
+
+ - Switches back to `tcp-adaptor-support` (zigpy/ziggurat#39), pinned to commit
+   `a73c330` (rebased through dev #51). The wire-protocol mismatch that motivated the
+   legacy-protocol branch is being fixed on the zigpy-ziggurat side instead
+   ([zigpy/zigpy-ziggurat#3](https://github.com/zigpy/zigpy-ziggurat/pull/3)), so a
+   separate protocol-compat branch is no longer needed here.
+ - Pins the build to a commit (`--rev`) instead of tracking a branch name
+   (`--branch`): Docker only re-runs the install layer when an ARG it depends on
+   changes, so a moving branch name could silently keep serving a stale cached build.
+   Bump `ZIGGURAT_REV` in the Dockerfile to pick up new commits.
+
 ## 0.2.2-tcp-test
 
  - Switches the testing build to `tcp-adaptor-support-legacy-protocol` instead of
